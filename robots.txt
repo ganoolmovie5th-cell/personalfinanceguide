@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://steady-cocada-d19638.netlify.app/sitemap.xml
