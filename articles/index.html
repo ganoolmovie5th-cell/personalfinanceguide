@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daftar Artikel - Personal Finance Guide</title>
+    <meta name="description" content="Daftar lengkap artikel tentang keuangan pribadi, investasi, dan bisnis online.">
+    <style>
+        body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 800px; margin: 0 auto; padding: 20px; }
+        h1 { color: #2c3e50; text-align: center; }
+        #articles-list { list-style: none; padding: 0; }
+        #articles-list li { margin-bottom: 10px; }
+        #articles-list a { color: #3498db; text-decoration: none; }
+        #articles-list a:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+    <h1>Daftar Artikel</h1>
+    <p>Total artikel: <span id="article-count">0</span></p>
+    <ul id="articles-list">
+        <!-- Daftar artikel akan diisi oleh JavaScript -->
+    </ul>
+
+    <script>
+        // Fetch daftar artikel dari folder /articles/
+        fetch('/articles/')
+            .then(response => response.text())
+            .then(html => {
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(html, 'text/html');
+                const articles = Array.from(doc.querySelectorAll('a[href$=".html"]'))
+                    .map(a => a.getAttribute('href').replace('.html', ''))
+                    .filter(name => !name.includes('index')); // Skip file index.html
+
+                // Tampilkan di halaman
+                const list = document.getElementById('articles-list');
+                articles.forEach(article => {
+                    const li = document.createElement('li');
+                    li.innerHTML = `<a href="${article}.html">${article.replace(/-/g, ' ')}</a>`;
+                    list.appendChild(li);
+                });
+                
+                // Update jumlah artikel
+                document.getElementById('article-count').textContent = articles.length;
+            })
+            .catch(err => console.error('Error:', err));
+    </script>
+</body>
+</html>
